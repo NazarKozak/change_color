@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:change_color/components/components.dart';
 import 'package:change_color/utils/utils.dart';
+import 'package:change_color/screens/home/components/components.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required this.title}) : super(key: key);
