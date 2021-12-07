@@ -27,8 +27,15 @@ class _HomeScreenState extends State<HomeScreen> {
     changeColor();
   }
 
+  @override
+  void dispose() {
+    _gradientColors.clear();
+
+    super.dispose();
+  }
+
   void changeColor() {
-    if (isGradient) {
+    if (isGradient && colorsCount > 0) {
       _gradientColors = ColorUtils.randomHexColors(colorsCount);
     } else {
       _backgroundColor = ColorUtils.randomHexColor;
@@ -67,9 +74,8 @@ class _HomeScreenState extends State<HomeScreen> {
               builder: (BuildContext context) => EditDialog(
                 isGradient: isGradient,
                 onChange: (value) {
-                  setState(() {
-                    isGradient = value;
-                  });
+                  isGradient = value;
+                  changeColor();
                 }
               ),
             );
