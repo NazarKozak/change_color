@@ -1,7 +1,7 @@
-
 import 'package:flutter/material.dart';
 
-import 'package:change_color/extensions/extensions.dart';
+import 'package:change_color/components/components.dart';
+import 'package:change_color/utils/utils.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required this.title}) : super(key: key);
@@ -14,44 +14,69 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  Color backgroundColor = Colors.white;
+  List<Color> _gradientColors = [];
+  Color _backgroundColor = Colors.white;
+
+  bool isGradient = true;
+  int colorsCount = 4;
+
+  @override
+  void initState() {
+    super.initState();
+
+    changeColor();
+  }
 
   void changeColor() {
-    setState(() {
-      backgroundColor = backgroundColor.randomHexColor;
-    });
+    if (isGradient) {
+      _gradientColors = ColorUtils.randomHexColors(colorsCount);
+    } else {
+      _backgroundColor = ColorUtils.randomHexColor;
+    }
+
+    setState(() { });
   }
+
+  Color get backgroundColor => isGradient ? _gradientColors.first : _backgroundColor;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () => changeColor(),
+      onTap: changeColor,
       child: Scaffold(
         appBar: appBar(context),
-        backgroundColor: backgroundColor,
-        body: Stack(
-          fit: StackFit.passthrough,
-          alignment: AlignmentDirectional.center,
-          children: [
-            Center(
-              child: Text(
-                'Hey there',
-                style: TextStyle(
-                  fontSize: 40,
-                  color: backgroundColor.textLuminanceColor,
-                ),
-              ),
-            ),
-          ],
-        )
+        body: body
       ),
     );
   }
 
+  Widget get body => isGradient ? GradientBackground(gradientColors: _gradientColors, child: buildContent)
+      : SolidBackground(backgroundColor: _backgroundColor, child: buildContent);
+
+  Widget get buildContent => Center(child: LuminanceText(text: 'Hey there', backgroundColor: backgroundColor));
+
   AppBar appBar(BuildContext context) {
     return AppBar(
       title: Text(widget.title),
+      actions: [
+        IconButton(
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) => EditDialog(
+                isGradient: isGradient,
+                onChange: (value) {
+                  setState(() {
+                    isGradient = value;
+                  });
+                }
+              ),
+            );
+          },
+          icon: const Icon(Icons.edit))
+      ],
     );
   }
+
 }
