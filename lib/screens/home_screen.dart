@@ -17,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Color> _gradientColors = [];
   Color _backgroundColor = Colors.white;
 
-  bool isGradient = true;
+  bool isGradient = false;
   int colorsCount = 4;
 
   @override
@@ -37,8 +37,6 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() { });
   }
 
-  Color get backgroundColor => isGradient ? _gradientColors.first : _backgroundColor;
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -50,6 +48,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  Color get backgroundColor => isGradient ? _gradientColors.first : _backgroundColor;
 
   Widget get body => isGradient ? GradientBackground(gradientColors: _gradientColors, child: buildContent)
       : SolidBackground(backgroundColor: _backgroundColor, child: buildContent);

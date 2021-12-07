@@ -50,7 +50,7 @@ class _EditDialogState extends State<EditDialog> {
             ),
             SimpleDialogOption(
               onPressed: () {
-                Navigator.pop(context, true);
+                Navigator.pop(context);
                 widget.onChange(_isGradient);
               },
               child: const Text('Apply',
